@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Hero from './Hero';
@@ -8,15 +8,17 @@ function App() {
   const [monsterMove, setMonsterMove] = useState(null);
   const [heroDmg, setHeroDmg] = useState(0);
   const [monsterDmg, setMonsterDmg] = useState(0);
-  const [fight, setFight] = useState(false);
+  const [gameStatus, setGameStatus] = useState({fight: false, end: false, winner: ''});
 
   useEffect(() => {
     if (heroMove && monsterMove) {
-      setFight(true);
+      gameStatus.fight = true;
+      setGameStatus({...gameStatus});
       setHeroDmg(calcDamage(heroMove, monsterMove));
       setMonsterDmg(calcDamage(monsterMove, heroMove));
     } else {
-      setFight(false);
+      gameStatus.fight = false;
+      setGameStatus({...gameStatus});
       setHeroDmg(0);
       setMonsterDmg(0);
     }
@@ -40,8 +42,9 @@ function App() {
         maxHealth={10}
         name='Лютый'
         imageName='dragon'
-        fight={fight}
         dmg={monsterDmg}
+        gameStatus={gameStatus}
+        setGameStatus={setGameStatus}
         setMove={setMonsterMove}
         moves={[
           {
@@ -70,12 +73,14 @@ function App() {
           },
         ]}
       />
+      <Typography variant='h4' component='h3' textAlign='center'>{gameStatus.end && `${gameStatus.winner} повержен`}</Typography>
       <Hero
         maxHealth={10}
         name='Евстафий'
         imageName='wizard'
-        fight={fight}
         dmg={heroDmg}
+        gameStatus={gameStatus}
+        setGameStatus={setGameStatus}
         setMove={setHeroMove}
         moves={[
           {

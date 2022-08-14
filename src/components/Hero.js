@@ -4,11 +4,16 @@ import { List, Typography } from '@mui/material';
 import HealthLine from './HealthLine';
 import { Box } from '@mui/system';
 
-export default function Hero({ maxHealth, name, imageName, fight, dmg, setMove, moves }) {
+export default function Hero({ maxHealth, name, imageName, dmg, gameStatus, setGameStatus, setMove, moves }) {
   const [health, setHealth] = React.useState(maxHealth);
 
   useEffect(() => {
-    setHealth(prev => prev + dmg)
+    setHealth(prev => prev + dmg);
+    if (health <= 0) {
+      gameStatus.end = true;
+      gameStatus.winner = name;
+      setGameStatus({...gameStatus});
+    }
   }, [dmg])
 
   return (
@@ -26,7 +31,7 @@ export default function Hero({ maxHealth, name, imageName, fight, dmg, setMove, 
       </Box>
       <List component='ul'>
         {moves.map((move, index) => (
-          <Move key={index} move={move} setMove={setMove} fight={fight} />
+          <Move key={index} move={move} setMove={setMove} fight={gameStatus.fight} />
         ))}
       </List>
     </Box>
