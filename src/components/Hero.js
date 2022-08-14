@@ -1,5 +1,7 @@
 import Move from './Move';
 import React from 'react';
+import { List, Paper, Typography } from '@mui/material';
+import HealthLine from './HealthLine';
 
 export default function Hero({ maxHealth, name, moves }) {
   const [health, setHealth] = React.useState(maxHealth);
@@ -18,14 +20,16 @@ export default function Hero({ maxHealth, name, moves }) {
   }
 
   return (
-    <>
-      <p>{health}</p>
-      <h2>{name}</h2>
-      <ul>
+    <Paper variant='outlined' elevation={0} sx={{ p: 1 }}>
+      <HealthLine health={health} />
+      <Typography variant='h4' component='h2' textAlign='center'>
+        {name}
+      </Typography>
+      <List component='ul'>
         {moves.map((move, index) => (
           <Move key={index} move={move} onMoveClick={handleMoveClick} />
         ))}
-      </ul>
-    </>
+      </List>
+    </Paper>
   );
 }
