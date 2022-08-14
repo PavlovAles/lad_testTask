@@ -1,14 +1,42 @@
 import { Container } from '@mui/material';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import Hero from './Hero';
 
 function App() {
+  const [heroMove, setHeroMove] = useState(null);
+  const [monsterMove, setMonsterMove] = useState(null);
+  const [fight, setFight] = useState(false);
+
+  useEffect(() => {
+    if (heroMove && monsterMove) {
+      setFight(true);
+    } else {
+      setFight(false);
+    }
+  }, [heroMove, monsterMove])
+
+  function calcDamage(myMoove, hisMove) {
+    let magicDmg =
+      myMoove.magicArmorPercents - hisMove.magicDmg < 0
+        ? myMoove.magicArmorPercents - hisMove.magicDmg
+        : 0;
+    let physicalDmg =
+      myMoove.physicArmorPercents - hisMove.physicalDmg < 0
+        ? myMoove.physicArmorPercents - hisMove.physicalDmg
+        : 0;
+    return magicDmg + physicalDmg;
+  }
+
   return (
     <Container sx={{ my:10, display: 'flex', justifyContent:'space-between' }}>
       <Hero
         maxHealth={10}
         name='Лютый'
         imageName='dragon'
+        fight={fight}
+        setMove={setMonsterMove}
+        hisMove={monsterMove}
         moves={[
           {
             name: 'Удар когтистой лапой',
@@ -40,6 +68,8 @@ function App() {
         maxHealth={10}
         name='Евстафий'
         imageName='wizard'
+        fight={fight}
+        setMove={setHeroMove}
         moves={[
           {
             name: 'Удар боевым кадилом',

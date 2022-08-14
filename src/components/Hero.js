@@ -4,10 +4,10 @@ import { List, Typography } from '@mui/material';
 import HealthLine from './HealthLine';
 import { Box } from '@mui/system';
 
-export default function Hero({ maxHealth, name, imageName, moves }) {
+export default function Hero({ maxHealth, name, imageName, fight, setMove, moves }) {
   const [health, setHealth] = React.useState(maxHealth);
 
-  function handleMoveClick(myMoove, hisMove) {
+  function fight(myMoove, hisMove) {
     let magicDamage =
       myMoove.magicArmorPercents - hisMove.magicDmg < 0
         ? myMoove.magicArmorPercents - hisMove.magicDmg
@@ -16,7 +16,6 @@ export default function Hero({ maxHealth, name, imageName, moves }) {
       myMoove.physicArmorPercents - hisMove.physicalDmg < 0
         ? myMoove.physicArmorPercents - hisMove.physicalDmg
         : 0;
-
     setHealth(health - magicDamage - physicalDamage);
   }
 
@@ -35,7 +34,7 @@ export default function Hero({ maxHealth, name, imageName, moves }) {
       </Box>
       <List component='ul'>
         {moves.map((move, index) => (
-          <Move key={index} move={move} onMoveClick={handleMoveClick} />
+          <Move key={index} move={move} setMove={setMove} />
         ))}
       </List>
     </Box>
