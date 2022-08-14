@@ -7,7 +7,7 @@ export default function HealthLine({ health }) {
         <LinearProgress variant='determinate' value={health * 10} />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant='body2' color='text.secondary' align='right'>
           {health}
         </Typography>
       </Box>

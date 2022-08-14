@@ -8,6 +8,7 @@ function App() {
       <Hero
         maxHealth={10}
         name='Лютый'
+        imageName='dragon'
         moves={[
           {
             name: 'Удар когтистой лапой',
@@ -38,6 +39,7 @@ function App() {
       <Hero
         maxHealth={10}
         name='Евстафий'
+        imageName='wizard'
         moves={[
           {
             name: 'Удар боевым кадилом',
