@@ -15,17 +15,29 @@ export default function Move({ move, setMove, fight }) {
     cooldown,
   } = move;
 
-  const [isCoolingdown, setCoolingdown] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [isCoolingdown, setCoolingdown] = useState(false);
+  const [roundCounter, setRoundCounter] = useState(0);
 
   useEffect(() => {
     if (fight) {
       if (move.cooldown && selected) {
         setCoolingdown(true);
+        setRoundCounter((prev) => prev + 1);
       }
+      
+      if (isCoolingdown) {
+        setRoundCounter((prev) => prev + 1);
+        if (roundCounter === move.cooldown) {
+          setCoolingdown(false);
+          setRoundCounter(0);
+        }
+      }
+
       setSelected(false);
+      setMove(null);
     }
-  }, [fight])
+  }, [fight]);
 
   function handleMoveClick() {
     setMove(move);
