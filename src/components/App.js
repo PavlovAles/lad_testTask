@@ -6,13 +6,19 @@ import Hero from './Hero';
 function App() {
   const [heroMove, setHeroMove] = useState(null);
   const [monsterMove, setMonsterMove] = useState(null);
+  const [heroDmg, setHeroDmg] = useState(0);
+  const [monsterDmg, setMonsterDmg] = useState(0);
   const [fight, setFight] = useState(false);
 
   useEffect(() => {
     if (heroMove && monsterMove) {
       setFight(true);
+      setHeroDmg(calcDamage(heroMove, monsterMove));
+      setMonsterDmg(calcDamage(monsterMove, heroMove));
     } else {
       setFight(false);
+      setHeroDmg(0);
+      setMonsterDmg(0);
     }
   }, [heroMove, monsterMove])
 
@@ -35,8 +41,8 @@ function App() {
         name='Лютый'
         imageName='dragon'
         fight={fight}
+        dmg={monsterDmg}
         setMove={setMonsterMove}
-        hisMove={monsterMove}
         moves={[
           {
             name: 'Удар когтистой лапой',
@@ -69,6 +75,7 @@ function App() {
         name='Евстафий'
         imageName='wizard'
         fight={fight}
+        dmg={heroDmg}
         setMove={setHeroMove}
         moves={[
           {

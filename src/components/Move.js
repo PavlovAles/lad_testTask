@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { ListItem, ListItemButton, Paper, Typography } from '@mui/material';
 import LoopIcon from '@mui/icons-material/Loop';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-export default function Move({ move, setMove }) {
+export default function Move({ move, setMove, fight }) {
   const {
     name,
     physicalDmg,
@@ -18,6 +18,15 @@ export default function Move({ move, setMove }) {
   const [isCoolingdown, setCoolingdown] = useState(false);
   const [selected, setSelected] = useState(false);
 
+  useEffect(() => {
+    if (fight) {
+      if (move.cooldown && selected) {
+        setCoolingdown(true);
+      }
+      setSelected(false);
+    }
+  }, [fight])
+
   function handleMoveClick() {
     setMove(move);
     setSelected((prev) => !prev);
@@ -27,7 +36,9 @@ export default function Move({ move, setMove }) {
     <ListItem mb={1}>
       <Paper elevation={selected ? 8 : 1} sx={{ padding: 1, width: '100%' }}>
         <ListItemButton
+          selected={selected}
           disabled={isCoolingdown}
+          onClick={handleMoveClick}
           sx={{
             mb: 1,
             border: '1px solid grey',
@@ -36,8 +47,6 @@ export default function Move({ move, setMove }) {
               backgroundColor: 'rgb(255 142 0 / 83%)',
             },
           }}
-          selected={selected}
-          onClick={handleMoveClick}
         >
           <Typography variant='button' mx='auto'>
             {name}

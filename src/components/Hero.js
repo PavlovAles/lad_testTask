@@ -1,23 +1,15 @@
 import Move from './Move';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { List, Typography } from '@mui/material';
 import HealthLine from './HealthLine';
 import { Box } from '@mui/system';
 
-export default function Hero({ maxHealth, name, imageName, fight, setMove, moves }) {
+export default function Hero({ maxHealth, name, imageName, fight, dmg, setMove, moves }) {
   const [health, setHealth] = React.useState(maxHealth);
 
-  function fight(myMoove, hisMove) {
-    let magicDamage =
-      myMoove.magicArmorPercents - hisMove.magicDmg < 0
-        ? myMoove.magicArmorPercents - hisMove.magicDmg
-        : 0;
-    let physicalDamage =
-      myMoove.physicArmorPercents - hisMove.physicalDmg < 0
-        ? myMoove.physicArmorPercents - hisMove.physicalDmg
-        : 0;
-    setHealth(health - magicDamage - physicalDamage);
-  }
+  useEffect(() => {
+    setHealth(prev => prev + dmg)
+  }, [dmg])
 
   return (
     <Box sx={{ display: 'flex', gap:'30px', flexDirection:`${name === 'Евстафий' && 'row-reverse'}`}}>
@@ -34,7 +26,7 @@ export default function Hero({ maxHealth, name, imageName, fight, setMove, moves
       </Box>
       <List component='ul'>
         {moves.map((move, index) => (
-          <Move key={index} move={move} setMove={setMove} />
+          <Move key={index} move={move} setMove={setMove} fight={fight} />
         ))}
       </List>
     </Box>
