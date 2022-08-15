@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material';
+import { Container, Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Hero from './Hero';
@@ -12,26 +12,26 @@ function App() {
   const [gameStatus, setGameStatus] = useState({
     fight: false,
     end: false,
-    winner: '',
+    looser: '',
   });
 
   function setFightWithDelay() {
     setTimeout(() => {
-      gameStatus.fight = true;
+      gameStatus.fight = false;
       setGameStatus({ ...gameStatus });
-      setHeroDmg(calcDamage(heroMove, monsterMove));
-      setMonsterDmg(calcDamage(monsterMove, heroMove));
+      setHeroDmg(0);
+      setMonsterDmg(0);
     }, 1000);
   }
 
   useEffect(() => {
     if (heroMove && monsterMove) {
-      setFightWithDelay();
-    } else {
-      gameStatus.fight = false;
+      gameStatus.fight = true;
       setGameStatus({ ...gameStatus });
-      setHeroDmg(0);
-      setMonsterDmg(0);
+      setHeroDmg(calcDamage(heroMove, monsterMove));
+      setMonsterDmg(calcDamage(monsterMove, heroMove));
+    } else {
+      setFightWithDelay();
     }
   }, [heroMove, monsterMove]);
 
@@ -52,7 +52,7 @@ function App() {
       sx={{ my: 10, display: 'flex', justifyContent: 'space-between' }}
     >
       <Monster
-        maxHealth={10}
+        maxHealth={2}
         name='Лютый'
         imageName='dragon'
         dmg={monsterDmg}
@@ -86,9 +86,15 @@ function App() {
           },
         ]}
       />
-      <Typography variant='h4' component='h3' textAlign='center'>
-        {gameStatus.end && `${gameStatus.winner} повержен`}
-      </Typography>
+      <Paper sx={{ p:2, alignSelf:'top', height:'100%' }}>
+        <Typography variant='h4' component='h3' textAlign='center'>
+          {
+            !gameStatus.end && !gameStatus.fight && 'Твой ход' ||
+            gameStatus.fight && 'Бдышщ' ||
+            gameStatus.end && `${gameStatus.looser} повержен`
+          }
+        </Typography>
+      </Paper>
       <Hero
         maxHealth={20}
         name='Евстафий'

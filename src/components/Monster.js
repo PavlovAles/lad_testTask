@@ -26,13 +26,14 @@ export default function Monster({
   );
 
   useEffect(() => {
-    setHealth((prev) => prev + dmg);
-    if (health <= 0) {
+    const currentHealth = health + dmg;
+    setHealth(currentHealth);
+    if (currentHealth <= 0) {
       gameStatus.end = true;
-      gameStatus.winner = name;
-      setGameStatus({ ...gameStatus });
+      gameStatus.looser = name;
+      setGameStatus({...gameStatus});
     }
-  }, [dmg]);
+  }, [dmg])
 
   function makeRandomMove() {
     let avaliableMoves = Object.keys(movesStatus);
@@ -60,6 +61,7 @@ export default function Monster({
       sx={{
         display: 'flex',
         gap: '30px',
+        flexShrink: 0,
         flexDirection: `${name === 'Евстафий' && 'row-reverse'}`,
       }}
     >

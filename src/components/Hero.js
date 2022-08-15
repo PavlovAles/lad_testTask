@@ -8,16 +8,17 @@ export default function Hero({ maxHealth, name, imageName, dmg, gameStatus, setG
   const [health, setHealth] = React.useState(maxHealth);
 
   useEffect(() => {
-    setHealth(prev => prev + dmg);
-    if (health <= 0) {
+    const currentHealth = health + dmg;
+    setHealth(currentHealth);
+    if (currentHealth <= 0) {
       gameStatus.end = true;
-      gameStatus.winner = name;
+      gameStatus.looser = name;
       setGameStatus({...gameStatus});
     }
   }, [dmg])
 
   return (
-    <Box sx={{ display: 'flex', gap:'30px', flexDirection:`${name === 'Евстафий' && 'row-reverse'}`}}>
+    <Box sx={{ display: 'flex', gap:'30px', flexShrink: 0, flexDirection:`${name === 'Евстафий' && 'row-reverse'}`}}>
       <Box sx={{width:'150px'}}>
         <Typography variant='h4' component='h2' textAlign='center'>
           {name}
