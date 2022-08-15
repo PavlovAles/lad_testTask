@@ -2,6 +2,7 @@ import { Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Hero from './Hero';
+import Monster from './Monster';
 
 function App() {
   const [heroMove, setHeroMove] = useState(null);
@@ -38,7 +39,7 @@ function App() {
 
   return (
     <Container sx={{ my:10, display: 'flex', justifyContent:'space-between' }}>
-      <Hero
+      <Monster
         maxHealth={10}
         name='Лютый'
         imageName='dragon'
