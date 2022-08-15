@@ -5,7 +5,13 @@ import LoopIcon from '@mui/icons-material/Loop';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-export default function MonsterMove({ move, setMove, fight, active, updateMoveStatus }) {
+export default function MonsterMove({
+  move,
+  setMove,
+  fight,
+  active,
+  updateMoveStatus,
+}) {
   const {
     name,
     physicalDmg,
@@ -20,27 +26,30 @@ export default function MonsterMove({ move, setMove, fight, active, updateMoveSt
 
   useEffect(() => {
     if (fight) {
+      if (!move.cooldown) {
+        updateMoveStatus(move.name, true);
+      }
       if (move.cooldown && active) {
         setCoolingdown(true);
+        updateMoveStatus(move.name, false);
         setRoundCounter((prev) => prev + 1);
       }
-      
+
       if (isCoolingdown) {
         setRoundCounter((prev) => prev + 1);
         if (roundCounter === move.cooldown) {
           setCoolingdown(false);
+          updateMoveStatus(move.name, true);
           setRoundCounter(0);
         }
       }
-      
-      updateMoveStatus(move.name, !isCoolingdown);
       setMove(null);
     }
   }, [fight]);
 
   useEffect(() => {
     setMove(move);
-  }, [active])
+  }, [active]);
 
   return (
     <ListItem mb={1}>

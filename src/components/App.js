@@ -9,21 +9,31 @@ function App() {
   const [monsterMove, setMonsterMove] = useState(null);
   const [heroDmg, setHeroDmg] = useState(0);
   const [monsterDmg, setMonsterDmg] = useState(0);
-  const [gameStatus, setGameStatus] = useState({fight: false, end: false, winner: ''});
+  const [gameStatus, setGameStatus] = useState({
+    fight: false,
+    end: false,
+    winner: '',
+  });
+
+  function setFightWithDelay() {
+    setTimeout(() => {
+      gameStatus.fight = true;
+      setGameStatus({ ...gameStatus });
+      setHeroDmg(calcDamage(heroMove, monsterMove));
+      setMonsterDmg(calcDamage(monsterMove, heroMove));
+    }, 1000);
+  }
 
   useEffect(() => {
     if (heroMove && monsterMove) {
-      gameStatus.fight = true;
-      setGameStatus({...gameStatus});
-      setHeroDmg(calcDamage(heroMove, monsterMove));
-      setMonsterDmg(calcDamage(monsterMove, heroMove));
+      setFightWithDelay();
     } else {
       gameStatus.fight = false;
-      setGameStatus({...gameStatus});
+      setGameStatus({ ...gameStatus });
       setHeroDmg(0);
       setMonsterDmg(0);
     }
-  }, [heroMove, monsterMove])
+  }, [heroMove, monsterMove]);
 
   function calcDamage(myMoove, hisMove) {
     let magicDmg =
@@ -38,7 +48,9 @@ function App() {
   }
 
   return (
-    <Container sx={{ my:10, display: 'flex', justifyContent:'space-between' }}>
+    <Container
+      sx={{ my: 10, display: 'flex', justifyContent: 'space-between' }}
+    >
       <Monster
         maxHealth={10}
         name='Лютый'
@@ -74,7 +86,9 @@ function App() {
           },
         ]}
       />
-      <Typography variant='h4' component='h3' textAlign='center'>{gameStatus.end && `${gameStatus.winner} повержен`}</Typography>
+      <Typography variant='h4' component='h3' textAlign='center'>
+        {gameStatus.end && `${gameStatus.winner} повержен`}
+      </Typography>
       <Hero
         maxHealth={10}
         name='Евстафий'
