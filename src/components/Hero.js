@@ -7,6 +7,8 @@ import { Box } from '@mui/system';
 export default function Hero({ maxHealth, name, imageName, dmg, gameStatus, setGameStatus, setMove, moves }) {
   const [health, setHealth] = React.useState(maxHealth);
 
+  useEffect(() => setHealth(maxHealth), [maxHealth]);
+
   useEffect(() => {
     const currentHealth = health + dmg;
     setHealth(currentHealth);
@@ -28,7 +30,7 @@ export default function Hero({ maxHealth, name, imageName, dmg, gameStatus, setG
           src={require(`../images/${imageName}.png`)}
           style={{ width: '124px' }}
         />
-        <HealthLine maxHealth={maxHealth} health={health} />
+        {gameStatus.start && <HealthLine maxHealth={maxHealth} health={health} />}
       </Box>
       <List component='ul'>
         {moves.map((move, index) => (

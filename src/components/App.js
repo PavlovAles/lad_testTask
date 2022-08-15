@@ -1,19 +1,27 @@
-import { Container, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Hero from './Hero';
 import Monster from './Monster';
+import CentralBlock from './CentralBlock';
 
 function App() {
   const [heroMove, setHeroMove] = useState(null);
   const [monsterMove, setMonsterMove] = useState(null);
+  const [heroMaxHealth, setHeroMaxHealth] = useState(1);
   const [heroDmg, setHeroDmg] = useState(0);
   const [monsterDmg, setMonsterDmg] = useState(0);
   const [gameStatus, setGameStatus] = useState({
+    start: false,
     fight: false,
     end: false,
     looser: '',
   });
+
+  function handleDifficultyClick(heroMaxHealth) {
+    setHeroMaxHealth(heroMaxHealth);
+    setGameStatus({ ...gameStatus, start: true });
+  }
 
   function setFightWithDelay() {
     setTimeout(() => {
@@ -86,17 +94,9 @@ function App() {
           },
         ]}
       />
-      <Paper sx={{ p:2, alignSelf:'top', height:'100%' }}>
-        <Typography variant='h4' component='h3' textAlign='center'>
-          {
-            !gameStatus.end && !gameStatus.fight && 'Твой ход' ||
-            gameStatus.fight && 'Бдышщ' ||
-            gameStatus.end && `${gameStatus.looser} повержен`
-          }
-        </Typography>
-      </Paper>
+      <CentralBlock gameStatus={gameStatus} onDifficultClick={handleDifficultyClick}/>
       <Hero
-        maxHealth={20}
+        maxHealth={heroMaxHealth}
         name='Евстафий'
         imageName='wizard'
         dmg={heroDmg}
