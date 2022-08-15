@@ -90,7 +90,7 @@ function App() {
         {gameStatus.end && `${gameStatus.winner} повержен`}
       </Typography>
       <Hero
-        maxHealth={10}
+        maxHealth={20}
         name='Евстафий'
         imageName='wizard'
         dmg={heroDmg}

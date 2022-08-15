@@ -72,7 +72,7 @@ export default function Monster({
           src={require(`../images/${imageName}.png`)}
           style={{ width: '124px' }}
         />
-        <HealthLine health={health} />
+        <HealthLine maxHealth={maxHealth} health={health} />
       </Box>
       <List component='ul'>
         {moves.map((move, index) => (

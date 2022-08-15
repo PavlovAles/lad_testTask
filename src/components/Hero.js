@@ -27,7 +27,7 @@ export default function Hero({ maxHealth, name, imageName, dmg, gameStatus, setG
           src={require(`../images/${imageName}.png`)}
           style={{ width: '124px' }}
         />
-        <HealthLine health={health} />
+        <HealthLine maxHealth={maxHealth} health={health} />
       </Box>
       <List component='ul'>
         {moves.map((move, index) => (
