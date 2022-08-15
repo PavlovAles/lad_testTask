@@ -5,7 +5,7 @@ import LoopIcon from '@mui/icons-material/Loop';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-export default function MonsterMove({ move, setMove, fight, active }) {
+export default function MonsterMove({ move, setMove, fight, active, updateMoveStatus }) {
   const {
     name,
     physicalDmg,
@@ -15,13 +15,12 @@ export default function MonsterMove({ move, setMove, fight, active }) {
     cooldown,
   } = move;
 
-  const [selected, setSelected] = useState(false);
   const [isCoolingdown, setCoolingdown] = useState(false);
   const [roundCounter, setRoundCounter] = useState(0);
 
   useEffect(() => {
     if (fight) {
-      if (move.cooldown && selected) {
+      if (move.cooldown && active) {
         setCoolingdown(true);
         setRoundCounter((prev) => prev + 1);
       }
@@ -33,16 +32,15 @@ export default function MonsterMove({ move, setMove, fight, active }) {
           setRoundCounter(0);
         }
       }
-
-      setSelected(false);
+      
+      updateMoveStatus(move.name, !isCoolingdown);
       setMove(null);
     }
   }, [fight]);
 
-  function handleMoveClick() {
+  useEffect(() => {
     setMove(move);
-    setSelected((prev) => !prev);
-  }
+  }, [active])
 
   return (
     <ListItem mb={1}>
@@ -50,7 +48,6 @@ export default function MonsterMove({ move, setMove, fight, active }) {
         <ListItemButton
           selected={active}
           disabled={isCoolingdown}
-          onClick={handleMoveClick}
           sx={{
             mb: 1,
             border: '1px solid grey',
