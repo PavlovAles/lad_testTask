@@ -8,7 +8,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 export default function MonsterMove({
   move,
   setMove,
-  fight,
+  gameStatus,
   active,
   updateMoveStatus,
 }) {
@@ -25,31 +25,30 @@ export default function MonsterMove({
   const [roundCounter, setRoundCounter] = useState(0);
 
   useEffect(() => {
-    if (fight) {
-      if (!move.cooldown) {
-        updateMoveStatus(move.name, true);
-      }
-      if (move.cooldown && active) {
-        setCoolingdown(true);
-        updateMoveStatus(move.name, false);
-        setRoundCounter((prev) => prev + 1);
-      }
-
-      if (isCoolingdown) {
-        setRoundCounter((prev) => prev + 1);
-        if (roundCounter === move.cooldown) {
-          setCoolingdown(false);
-          updateMoveStatus(move.name, true);
-          setRoundCounter(0);
-        }
-      }
-      setMove(null);
+    if (!gameStatus.fight) return;
+    if (!move.cooldown) {
+      updateMoveStatus(move.name, true);
     }
-  }, [fight]);
+    if (move.cooldown && active) {
+      setCoolingdown(true);
+      updateMoveStatus(move.name, false);
+      setRoundCounter((prev) => prev + 1);
+    }
+
+    if (isCoolingdown) {
+      setRoundCounter((prev) => prev + 1);
+      if (roundCounter === move.cooldown) {
+        setCoolingdown(false);
+        updateMoveStatus(move.name, true);
+        setRoundCounter(0);
+      }
+    }
+    setMove(null);
+  }, [gameStatus]);
 
   useEffect(() => {
-    setMove(move);
-  }, [active]);
+    if (active) setMove(move);
+  }, [gameStatus]);
 
   return (
     <ListItem mb={1}>

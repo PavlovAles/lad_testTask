@@ -20,13 +20,12 @@ function App() {
 
   function handleDifficultyClick(heroMaxHealth) {
     setHeroMaxHealth(heroMaxHealth);
-    setGameStatus({ ...gameStatus, start: true });
+    setGameStatus(prev => ({ ...prev, start: true }));
   }
 
   function setFightWithDelay() {
     setTimeout(() => {
-      gameStatus.fight = false;
-      setGameStatus({ ...gameStatus });
+      setGameStatus(prev => ({ ...prev, fight: false }));
       setHeroDmg(0);
       setMonsterDmg(0);
     }, 1000);
@@ -34,8 +33,7 @@ function App() {
 
   useEffect(() => {
     if (heroMove && monsterMove) {
-      gameStatus.fight = true;
-      setGameStatus({ ...gameStatus });
+      setGameStatus(prev => ({ ...prev, fight: true }));
       setHeroDmg(calcDamage(heroMove, monsterMove));
       setMonsterDmg(calcDamage(monsterMove, heroMove));
     } else {

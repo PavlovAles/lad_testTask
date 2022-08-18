@@ -13,9 +13,7 @@ export default function Hero({ maxHealth, name, imageName, dmg, gameStatus, setG
     const currentHealth = health + dmg;
     setHealth(currentHealth);
     if (currentHealth <= 0) {
-      gameStatus.end = true;
-      gameStatus.looser = name;
-      setGameStatus({...gameStatus});
+      setGameStatus(prev => ({...prev, end: true, looser: name}));
     }
   }, [dmg])
 

@@ -29,9 +29,7 @@ export default function Monster({
     const currentHealth = health + dmg;
     setHealth(currentHealth);
     if (currentHealth <= 0) {
-      gameStatus.end = true;
-      gameStatus.looser = name;
-      setGameStatus({...gameStatus});
+      setGameStatus(prev => ({...prev, end: true, looser: name}));
     }
   }, [dmg])
 
@@ -45,16 +43,14 @@ export default function Monster({
   }
 
   function updateMoveStatus(name, avaliable) {
-    movesStatus[name].avaliable = avaliable;
-    movesStatus[name].active = false;
-    setMovesStatus({ ...movesStatus });
+    setMovesStatus((prev) => ({ ...prev, [name]: {avaliable, active:false} }));
   }
 
   useEffect(() => {
-    if (!gameStatus.fight) {
+    if (gameStatus.start && !gameStatus.fight) {
       makeRandomMove();
     }
-  }, [gameStatus.fight]);
+  }, [gameStatus]);
 
   return (
     <Box
@@ -82,6 +78,7 @@ export default function Monster({
             key={index}
             move={move}
             fight={gameStatus.fight}
+            gameStatus={gameStatus}
             active={movesStatus[move.name].active}
             updateMoveStatus={updateMoveStatus}
             setMove={setMove}
