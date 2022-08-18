@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
 import { ListItem, ListItemButton, Paper, Typography } from '@mui/material';
 import LoopIcon from '@mui/icons-material/Loop';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-export default function Move({ move, setMove, fight }) {
+export default function Move({ move, onMoveClick }) {
   const {
     name,
     physicalDmg,
@@ -13,44 +11,17 @@ export default function Move({ move, setMove, fight }) {
     physicArmorPercents,
     magicArmorPercents,
     cooldown,
+    active,
+    avaliable
   } = move;
-
-  const [selected, setSelected] = useState(false);
-  const [isCoolingdown, setCoolingdown] = useState(false);
-  const [roundCounter, setRoundCounter] = useState(0);
-
-  useEffect(() => {
-    if (fight) {
-      if (move.cooldown && selected) {
-        setCoolingdown(true);
-        setRoundCounter((prev) => prev + 1);
-      }
-      
-      if (isCoolingdown) {
-        setRoundCounter((prev) => prev + 1);
-        if (roundCounter === move.cooldown) {
-          setCoolingdown(false);
-          setRoundCounter(0);
-        }
-      }
-
-      setSelected(false);
-      setMove(null);
-    }
-  }, [fight]);
-
-  function handleMoveClick() {
-    setMove(move);
-    setSelected((prev) => !prev);
-  }
 
   return (
     <ListItem mb={1}>
-      <Paper elevation={selected ? 8 : 1} sx={{ padding: 1, width: '100%' }}>
+      <Paper elevation={active ? 8 : 1} sx={{ padding: 1, width: '100%' }}>
         <ListItemButton
-          selected={selected}
-          disabled={isCoolingdown}
-          onClick={handleMoveClick}
+          selected={active}
+          disabled={!avaliable}
+          onClick={() => onMoveClick(move)}
           sx={{
             mb: 1,
             border: '1px solid grey',

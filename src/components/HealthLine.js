@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, LinearProgress, Typography } from '@mui/material';
+
 export default function HealthLine({ maxHealth, health }) {
     const normalise = (value) => (value * 100) / (maxHealth);
     return (

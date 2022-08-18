@@ -1,46 +1,109 @@
-import { Box, Button, Container, Paper, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import Hero from './Hero';
-import Monster from './Monster';
+import Character from './Character';
 import CentralBlock from './CentralBlock';
 
 function App() {
-  const [heroMove, setHeroMove] = useState(null);
+  const monsterMovesProps = [
+    {
+      name: 'Удар когтистой лапой',
+      physicalDmg: 3,
+      magicDmg: 0,
+      physicArmorPercents: 20,
+      magicArmorPercents: 20,
+      cooldown: 0,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+    {
+      name: 'Огненное дыхание',
+      physicalDmg: 0,
+      magicDmg: 4,
+      physicArmorPercents: 0,
+      magicArmorPercents: 0,
+      cooldown: 3,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+    {
+      name: 'Удар хвостом',
+      physicalDmg: 2,
+      magicDmg: 0,
+      physicArmorPercents: 50,
+      magicArmorPercents: 0,
+      cooldown: 2,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+  ];
+
+  const heroMovesProps = [
+    {
+      name: 'Удар боевым кадилом',
+      physicalDmg: 2,
+      magicDmg: 0,
+      physicArmorPercents: 0,
+      magicArmorPercents: 50,
+      cooldown: 0,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+    {
+      name: 'Вертушка левой пяткой',
+      physicalDmg: 4,
+      magicDmg: 0,
+      physicArmorPercents: 0,
+      magicArmorPercents: 0,
+      cooldown: 4,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+    {
+      name: 'Каноничный фаербол',
+      physicalDmg: 0,
+      magicDmg: 5,
+      physicArmorPercents: 0,
+      magicArmorPercents: 0,
+      cooldown: 3,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+    {
+      name: 'Магический блок',
+      physicalDmg: 0,
+      magicDmg: 0,
+      physicArmorPercents: 100,
+      magicArmorPercents: 100,
+      cooldown: 4,
+      cooldownCounter: 0,
+      active: false,
+      avaliable: true,
+    },
+  ]
+
+  const [monsterHealth, setMonsterHealth] = React.useState(10);
   const [monsterMove, setMonsterMove] = useState(null);
+  const [monsterMoveList, setMonsterMoveList] = React.useState(monsterMovesProps);
+  
   const [heroMaxHealth, setHeroMaxHealth] = useState(1);
-  const [heroDmg, setHeroDmg] = useState(0);
-  const [monsterDmg, setMonsterDmg] = useState(0);
+  const [heroHealth, setHeroHealth] = React.useState(1);
+  const [heroMove, setHeroMove] = useState(null);
+  const [heroMoveList, setHeroMoveList] = React.useState(heroMovesProps);
+
   const [gameStatus, setGameStatus] = useState({
     start: false,
     fight: false,
     end: false,
     looser: '',
   });
-
-  function handleDifficultyClick(heroMaxHealth) {
-    setHeroMaxHealth(heroMaxHealth);
-    setGameStatus(prev => ({ ...prev, start: true }));
-  }
-
-  function setFightWithDelay() {
-    setTimeout(() => {
-      setGameStatus(prev => ({ ...prev, fight: false }));
-      setHeroDmg(0);
-      setMonsterDmg(0);
-    }, 1000);
-  }
-
-  useEffect(() => {
-    if (heroMove && monsterMove) {
-      setGameStatus(prev => ({ ...prev, fight: true }));
-      setHeroDmg(calcDamage(heroMove, monsterMove));
-      setMonsterDmg(calcDamage(monsterMove, heroMove));
-    } else {
-      setFightWithDelay();
-    }
-  }, [heroMove, monsterMove]);
-
+  
   function calcDamage(myMoove, hisMove) {
     let magicDmg =
       myMoove.magicArmorPercents - hisMove.magicDmg < 0
@@ -53,88 +116,116 @@ function App() {
     return magicDmg + physicalDmg;
   }
 
+  function resetFightWithDelay() {
+    setTimeout(() => {
+      setGameStatus(prev => ({ ...prev, fight: false }));
+    }, 1000);
+  }
+
+  useEffect(() => {
+    if (gameStatus.start && !monsterMove) {
+      makeMonsterMove();
+    }
+
+    if (gameStatus.fight && !gameStatus.end) {
+      const newMonsterHealth = monsterHealth + calcDamage(monsterMove, heroMove);
+      const newHeroHealth = heroHealth + calcDamage(heroMove, monsterMove);
+
+      setMonsterHealth(newMonsterHealth);
+      setHeroHealth(newHeroHealth);
+      
+      if (newMonsterHealth <= 0 && newHeroHealth <= 0) {
+        setGameStatus(prev => ({...prev, fight: false, end: true, looser: 'Мир'}));
+        return;
+      }
+
+      if (newMonsterHealth <= 0) {
+        setGameStatus(prev => ({...prev, fight: false, end: true, looser: 'Лютый'}));
+        return;
+      }
+
+      if (newHeroHealth <= 0) {
+        setGameStatus(prev => ({...prev, fight: false, end: true, looser: 'Евстафий'}));
+        return;
+      }
+
+      resetFightWithDelay();
+      makeMonsterMove();
+
+    }
+  }, [gameStatus]);
+
+  function updateMoveStatus(move) {
+    if (move.active) {
+      if (move.cooldown) {
+        move.avaliable = false;
+      }
+      move.active = false;
+    }
+    if (!move.avaliable) {
+      move.cooldownCounter++;
+      if (move.cooldownCounter > move.cooldown) {
+        move.avaliable = true;
+        move.cooldownCounter = 0;
+      }
+    }
+    return move;
+  }
+
+  function makeMonsterMove() {
+    const moves = monsterMoveList.map(move => ({...updateMoveStatus(move)}));
+    const avaliableMoves = moves.filter(a => a.avaliable);
+    const randomMove = avaliableMoves[(avaliableMoves.length * Math.random()) << 0];
+    setMonsterMoveList(moves.map(move => {
+      if (move.name === randomMove.name) move.active = true;
+      return ({...move})
+    }));
+    setMonsterMove(randomMove);
+  }
+
+  function makeHeroMove(heroMove) {
+    const moves = heroMoveList.map(move => {
+      if (move.name === heroMove.name) move.active = true;
+      return ({...updateMoveStatus(move)})
+    })
+    setHeroMoveList(moves);
+    setHeroMove(heroMove);
+    setGameStatus(prev => ({ ...prev, fight: true }));
+  }
+
+  function handleDifficultyClick(heroMaxHealth) {
+    setHeroMaxHealth(heroMaxHealth);
+    setHeroHealth(heroMaxHealth);
+    setMonsterHealth(10);
+    setHeroMove(null);
+    setHeroMoveList(heroMovesProps);
+    setMonsterMove(null);
+    setMonsterMoveList(monsterMovesProps);
+    setGameStatus(prev => ({ ...prev, start: true }));
+  }
+
   return (
     <Container
       sx={{ my: 10, display: 'flex', justifyContent: 'space-between' }}
     >
-      <Monster
-        maxHealth={2}
+      <Character
+        maxHealth={10}
+        health={monsterHealth}
         name='Лютый'
         imageName='dragon'
-        dmg={monsterDmg}
+        moves={monsterMoveList}
+        onMoveClick={() => {}}
         gameStatus={gameStatus}
-        setGameStatus={setGameStatus}
-        setMove={setMonsterMove}
-        moves={[
-          {
-            name: 'Удар когтистой лапой',
-            physicalDmg: 3,
-            magicDmg: 0,
-            physicArmorPercents: 20,
-            magicArmorPercents: 20,
-            cooldown: 0,
-          },
-          {
-            name: 'Огненное дыхание',
-            physicalDmg: 0,
-            magicDmg: 4,
-            physicArmorPercents: 0,
-            magicArmorPercents: 0,
-            cooldown: 3,
-          },
-          {
-            name: 'Удар хвостом',
-            physicalDmg: 2,
-            magicDmg: 0,
-            physicArmorPercents: 50,
-            magicArmorPercents: 0,
-            cooldown: 2,
-          },
-        ]}
       />
       <CentralBlock gameStatus={gameStatus} onDifficultClick={handleDifficultyClick}/>
-      <Hero
+      <Character
         maxHealth={heroMaxHealth}
+        health={heroHealth}
         name='Евстафий'
         imageName='wizard'
-        dmg={heroDmg}
+        moves={heroMoveList}
+        onMoveClick={makeHeroMove}
         gameStatus={gameStatus}
-        setGameStatus={setGameStatus}
-        setMove={setHeroMove}
-        moves={[
-          {
-            name: 'Удар боевым кадилом',
-            physicalDmg: 2,
-            magicDmg: 0,
-            physicArmorPercents: 0,
-            magicArmorPercents: 50,
-            cooldown: 0,
-          },
-          {
-            name: 'Вертушка левой пяткой',
-            physicalDmg: 4,
-            magicDmg: 0,
-            physicArmorPercents: 0,
-            magicArmorPercents: 0,
-            cooldown: 4,
-          },
-          {
-            name: 'Каноничный фаербол',
-            physicalDmg: 0,
-            magicDmg: 5,
-            physicArmorPercents: 0,
-            magicArmorPercents: 0,
-            cooldown: 3,
-          },
-          {
-            name: 'Магический блок',
-            physicalDmg: 0,
-            magicDmg: 0,
-            physicArmorPercents: 100,
-            magicArmorPercents: 100,
-            cooldown: 4,
-          },
-        ]}
       />
     </Container>
   );
