@@ -86,12 +86,13 @@ function App() {
       active: false,
       avaliable: true,
     },
-  ]
+  ];
 
   const [monsterHealth, setMonsterHealth] = React.useState(10);
   const [monsterMove, setMonsterMove] = useState(null);
-  const [monsterMoveList, setMonsterMoveList] = React.useState(monsterMovesProps);
-  
+  const [monsterMoveList, setMonsterMoveList] =
+    React.useState(monsterMovesProps);
+
   const [heroMaxHealth, setHeroMaxHealth] = useState(1);
   const [heroHealth, setHeroHealth] = React.useState(1);
   const [heroMove, setHeroMove] = useState(null);
@@ -103,7 +104,7 @@ function App() {
     end: false,
     looser: '',
   });
-  
+
   function calcDamage(myMoove, hisMove) {
     let magicDmg =
       myMoove.magicArmorPercents - hisMove.magicDmg < 0
@@ -118,7 +119,8 @@ function App() {
 
   function resetFightWithDelay() {
     setTimeout(() => {
-      setGameStatus(prev => ({ ...prev, fight: false }));
+      setGameStatus((prev) => ({ ...prev, fight: false }));
+      setMonsterMove(null);
     }, 1000);
   }
 
@@ -128,30 +130,31 @@ function App() {
     }
 
     if (gameStatus.fight && !gameStatus.end) {
-      const newMonsterHealth = monsterHealth + calcDamage(monsterMove, heroMove);
+      const newMonsterHealth =
+        monsterHealth + calcDamage(monsterMove, heroMove);
       const newHeroHealth = heroHealth + calcDamage(heroMove, monsterMove);
 
       setMonsterHealth(newMonsterHealth);
       setHeroHealth(newHeroHealth);
-      
-      if (newMonsterHealth <= 0 && newHeroHealth <= 0) {
-        setGameStatus(prev => ({...prev, fight: false, end: true, looser: 'Мир'}));
+
+      if (newMonsterHealth <= 0 || newHeroHealth <= 0) {
+        setHeroMoveList(heroMovesProps);
+        setMonsterMoveList(monsterMovesProps);
+
+        setGameStatus({
+          start: false,
+          fight: false,
+          end: true,
+          looser:
+            newHeroHealth <= 0 && newMonsterHealth <= 0
+              ? 'Мир'
+              : newHeroHealth <= 0
+              ? 'Евстафий'
+              : 'Лютый',
+        });
         return;
       }
-
-      if (newMonsterHealth <= 0) {
-        setGameStatus(prev => ({...prev, fight: false, end: true, looser: 'Лютый'}));
-        return;
-      }
-
-      if (newHeroHealth <= 0) {
-        setGameStatus(prev => ({...prev, fight: false, end: true, looser: 'Евстафий'}));
-        return;
-      }
-
       resetFightWithDelay();
-      makeMonsterMove();
-
     }
   }, [gameStatus]);
 
@@ -173,24 +176,29 @@ function App() {
   }
 
   function makeMonsterMove() {
-    const moves = monsterMoveList.map(move => ({...updateMoveStatus(move)}));
-    const avaliableMoves = moves.filter(a => a.avaliable);
-    const randomMove = avaliableMoves[(avaliableMoves.length * Math.random()) << 0];
-    setMonsterMoveList(moves.map(move => {
-      if (move.name === randomMove.name) move.active = true;
-      return ({...move})
+    const moves = monsterMoveList.map((move) => ({
+      ...updateMoveStatus(move),
     }));
+    const avaliableMoves = moves.filter((a) => a.avaliable);
+    const randomMove =
+      avaliableMoves[(avaliableMoves.length * Math.random()) << 0];
+    setMonsterMoveList(
+      moves.map((move) => {
+        if (move.name === randomMove.name) move.active = true;
+        return { ...move };
+      })
+    );
     setMonsterMove(randomMove);
   }
 
   function makeHeroMove(heroMove) {
-    const moves = heroMoveList.map(move => {
+    const moves = heroMoveList.map((move) => {
       if (move.name === heroMove.name) move.active = true;
-      return ({...updateMoveStatus(move)})
-    })
+      return { ...updateMoveStatus(move) };
+    });
     setHeroMoveList(moves);
     setHeroMove(heroMove);
-    setGameStatus(prev => ({ ...prev, fight: true }));
+    setGameStatus((prev) => ({ ...prev, fight: true }));
   }
 
   function handleDifficultyClick(heroMaxHealth) {
@@ -201,7 +209,7 @@ function App() {
     setHeroMoveList(heroMovesProps);
     setMonsterMove(null);
     setMonsterMoveList(monsterMovesProps);
-    setGameStatus(prev => ({ ...prev, start: true }));
+    setGameStatus({ start: true, fight: false, end: false, looser: '' });
   }
 
   return (
@@ -217,7 +225,10 @@ function App() {
         onMoveClick={() => {}}
         gameStatus={gameStatus}
       />
-      <CentralBlock gameStatus={gameStatus} onDifficultClick={handleDifficultyClick}/>
+      <CentralBlock
+        gameStatus={gameStatus}
+        onDifficultClick={handleDifficultyClick}
+      />
       <Character
         maxHealth={heroMaxHealth}
         health={heroHealth}
