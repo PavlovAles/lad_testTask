@@ -27,7 +27,7 @@ export default function Move({ move, onMoveClick, gameStatus }) {
             mb: 1,
             border: '1px solid grey',
             borderRadius: 2,
-            '&.Mui-selected': {
+            '&.Mui-selected, &.Mui-selected:hover': {
               backgroundColor: 'rgb(255 142 0 / 83%)',
             },
           }}
