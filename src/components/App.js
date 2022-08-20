@@ -200,6 +200,8 @@ function App() {
   }
 
   function makeHeroMove(heroMove) {
+    if (gameStatus.fight) return;
+    
     const moves = heroMoveList.map((move) => {
       if (move.name === heroMove.name) move.active = true;
       return { ...move };
