@@ -10,7 +10,7 @@ export default function CentralBlock({gameStatus, onDifficultClick}) {
           {(!gameStatus.start && !gameStatus.end && 'Выбери сложность') ||
             (!gameStatus.end && !gameStatus.fight && 'Твой ход') ||
             (gameStatus.fight && 'Бдышщ') ||
-            (gameStatus.end && `${gameStatus.looser} повержен`)}
+            (gameStatus.end && `${gameStatus.looser} повержен! Ещё раз?`)}
         </Typography>
       </Paper>
       {(!gameStatus.start || gameStatus.end) && (
