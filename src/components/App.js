@@ -120,7 +120,7 @@ function App() {
   function resetFightWithDelay() {
     setTimeout(() => {
       setGameStatus((prev) => ({ ...prev, fight: false }));
-      
+
       let moves = monsterMoveList.map((move) => ({
         ...updateMoveStatus(move),
       }));
@@ -130,7 +130,6 @@ function App() {
       moves = heroMoveList.map((move) => ({ ...updateMoveStatus(move) }));
       setHeroMoveList(moves);
       setHeroMove(null);
-
     }, 1000);
   }
 
@@ -186,16 +185,18 @@ function App() {
   }
 
   function makeMonsterMove() {
-    const avaliableMoves = monsterMoveList.filter((a) => a.avaliable);
-    const randomMove =
-      avaliableMoves[(avaliableMoves.length * Math.random()) << 0];
-    setMonsterMoveList(
-      monsterMoveList.map((move) => {
-        if (move.name === randomMove.name) move.active = true;
-        return { ...move };
-      })
-    );
-    setMonsterMove(randomMove);
+    setTimeout(() => {
+      const avaliableMoves = monsterMoveList.filter((a) => a.avaliable);
+      const randomMove =
+        avaliableMoves[(avaliableMoves.length * Math.random()) << 0];
+      setMonsterMoveList(
+        monsterMoveList.map((move) => {
+          if (move.name === randomMove.name) move.active = true;
+          return { ...move };
+        })
+      );
+      setMonsterMove(randomMove);
+    }, 1000);
   }
 
   function makeHeroMove(heroMove) {
