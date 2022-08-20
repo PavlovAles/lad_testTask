@@ -30,7 +30,7 @@ export default function Character({
           src={require(`../images/${imageName}.png`)}
           style={{ width: '124px' }}
         />
-        {gameStatus.start && (
+        {(gameStatus.start || gameStatus.end) && (
           <HealthLine maxHealth={maxHealth} health={health} />
         )}
       </Box>
