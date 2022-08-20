@@ -10,7 +10,7 @@ export default function Character({
   imageName,
   moves,
   onMoveClick,
-  gameStatus
+  gameStatus,
 }) {
   return (
     <Box
@@ -21,8 +21,16 @@ export default function Character({
         flexDirection: `${name === 'Евстафий' && 'row-reverse'}`,
       }}
     >
-      <Box sx={{ width: '150px' }}>
-        <Typography variant='h4' component='h2' textAlign='center'>
+      <Box
+        sx={{
+          width: '150px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 2,
+        }}
+      >
+        <Typography variant='h4' component='h2'>
           {name}
         </Typography>
         <img
