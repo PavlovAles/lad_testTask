@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/namerepository/static/css/main.047b904f.css",
+    "main.js": "/namerepository/static/js/main.25e665a6.js",
+    "static/js/787.5f8b4b68.chunk.js": "/namerepository/static/js/787.5f8b4b68.chunk.js",
+    "static/media/Inter-Medium.woff?v=3.19": "/namerepository/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
+    "static/media/Inter-Black.woff?v=3.19": "/namerepository/static/media/Inter-Black.c6938660eec019fefd68.woff",
+    "static/media/Inter-Regular.woff?v=3.19": "/namerepository/static/media/Inter-Regular.8c206db99195777c6769.woff",
+    "static/media/Inter-Medium.woff2?v=3.19": "/namerepository/static/media/Inter-Medium.293fd13dbca5a3e450ef.woff2",
+    "static/media/Inter-Black.woff2?v=3.19": "/namerepository/static/media/Inter-Black.15ca31c0a2a68f76d2d1.woff2",
+    "static/media/Inter-Regular.woff2?v=3.19": "/namerepository/static/media/Inter-Regular.c8ba52b05a9ef10f4758.woff2",
+    "static/media/dragon.png": "/namerepository/static/media/dragon.1f136c5580adefcc3c48.png",
+    "static/media/wizard.png": "/namerepository/static/media/wizard.dde87920029f399adff7.png",
+    "static/media/swords.png": "/namerepository/static/media/swords.c261a243116cf29d8317.png",
+    "index.html": "/namerepository/index.html",
+    "main.047b904f.css.map": "/namerepository/static/css/main.047b904f.css.map",
+    "main.25e665a6.js.map": "/namerepository/static/js/main.25e665a6.js.map",
+    "787.5f8b4b68.chunk.js.map": "/namerepository/static/js/787.5f8b4b68.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.047b904f.css",
+    "static/js/main.25e665a6.js"
+  ]
+}
