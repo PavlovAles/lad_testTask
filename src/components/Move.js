@@ -11,6 +11,7 @@ export default function Move({ move, onMoveClick, gameStatus }) {
     physicArmorPercents,
     magicArmorPercents,
     cooldown,
+    cooldownCounter,
     active,
     avaliable
   } = move;
@@ -43,10 +44,10 @@ export default function Move({ move, onMoveClick, gameStatus }) {
           <AutoFixHighIcon sx={{ verticalAlign: 'middle' }} />
           {` Магический урон ${magicDmg} / защита ${magicArmorPercents}`}
         </Typography>
-        <Typography variant='body2'>
+        {!cooldown ? '' : <Typography variant='body2'>
           <LoopIcon sx={{ verticalAlign: 'middle' }} />
-          {` Cooldown: ${cooldown}`}
-        </Typography>
+          {` Заряд: ${(cooldownCounter === 0) ? cooldown : cooldownCounter - 1} из ${cooldown}`}
+        </Typography>}
       </Paper>
     </ListItem>
   );
