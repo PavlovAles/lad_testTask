@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
-
+import swordsPath from '../images/swords.png'
 export default function CentralBlock({gameStatus, onDifficultClick}) {
   return (
     <Box
@@ -26,6 +26,7 @@ export default function CentralBlock({gameStatus, onDifficultClick}) {
           </Button>
         </Box>
       )}
+      {gameStatus.fight && <img src={swordsPath} style={{width: '100%'}} />}
     </Box>
   );
 }
