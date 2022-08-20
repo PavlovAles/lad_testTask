@@ -3,7 +3,7 @@ import LoopIcon from '@mui/icons-material/Loop';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-export default function Move({ move, onMoveClick }) {
+export default function Move({ move, onMoveClick, gameStatus }) {
   const {
     name,
     physicalDmg,
@@ -20,7 +20,7 @@ export default function Move({ move, onMoveClick }) {
       <Paper elevation={active ? 8 : 1} sx={{ padding: 1, width: '100%' }}>
         <ListItemButton
           selected={active}
-          disabled={!avaliable}
+          disabled={!avaliable || !gameStatus.start}
           onClick={() => onMoveClick(move)}
           sx={{
             mb: 1,

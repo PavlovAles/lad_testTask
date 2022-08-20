@@ -40,6 +40,7 @@ export default function Character({
             key={index}
             move={move}
             onMoveClick={onMoveClick}
+            gameStatus={gameStatus}
           />
         ))}
       </List>
